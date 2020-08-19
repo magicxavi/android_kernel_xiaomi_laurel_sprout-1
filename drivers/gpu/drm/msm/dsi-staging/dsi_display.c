@@ -1622,12 +1622,27 @@ int dsi_display_set_power(struct drm_connector *connector,
 {
 	struct dsi_display *display = disp;
 	int rc = 0;
+    //static int flag_tp_notify=0;
 	int blank;
 	struct msm_drm_notifier notifier_data;
 	struct drm_device *dev = NULL;
+	//struct sde_connector *disp_param_set;
+	#if 0
+	struct drm_device *dev = NULL;
+	const char *sde_mode_dpms_str[] = {
+		[SDE_MODE_DPMS_ON] = "SDE_MODE_DPMS_ON",
+		[SDE_MODE_DPMS_LP1] = "SDE_MODE_DPMS_LP1",
+		[SDE_MODE_DPMS_LP2] = "SDE_MODE_DPMS_LP2",
+		[SDE_MODE_DPMS_STANDBY] = "SDE_MODE_DPMS_STANDBY",
+		[SDE_MODE_DPMS_SUSPEND] = "SDE_MODE_DPMS_SUSPEND",
+		[SDE_MODE_DPMS_OFF] = "SDE_MODE_DPMS_OFF",
+	};
+    #endif
+	//disp_param_set = container_of(connector,struct sde_connector,base);
 
 	pr_debug("power_mode = %s\n",power_mode);
 
+	//pr_info("low power mode set brightness:%d, power_mode = %d\n",disp_param_set->disp_param_unset_bl, power_mode);
 	if (!display || !display->panel) {
 		pr_err("invalid display/panel\n");
 		return -EINVAL;
@@ -1640,8 +1655,6 @@ int dsi_display_set_power(struct drm_connector *connector,
 			dev = connector->dev;
 	}
 
-	notifier_data.data = &power_mode;
-	notifier_data.id = MSM_DRM_PRIMARY_DISPLAY;
 
 	switch (power_mode) {
 	case SDE_MODE_DPMS_LP1:
